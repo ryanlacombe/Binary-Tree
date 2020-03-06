@@ -75,16 +75,22 @@ void BinaryTree::remove(int a_nValue)
 		if (currentNode->hasRight())
 		{
 			TreeNode* iteratorNode = currentNode->getRight();
-			TreeNode* iteratorParent = nullptr;
+			TreeNode* iteratorParent = currentNode;
 
+			//Checks if the iterator node's left isn't nullptr
 			while (iteratorNode->getLeft() != nullptr)
 			{
 				iteratorParent = iteratorNode;
 				iteratorNode = iteratorNode->getLeft();
 			}
 
-			if (iteratorNode = iteratorParent->getLeft())
+			//copies the iterator's data to current node
+			currentNode->setData(iteratorNode->getData());
+
+			//If we are deleting the parent's left node
+			if (iteratorNode == iteratorParent->getLeft())
 			{
+				//Set the left child of the parent to the right child of the minimum node
 				if (iteratorNode->hasRight())
 				{
 					iteratorParent->setRight(iteratorNode->getRight());
@@ -96,8 +102,10 @@ void BinaryTree::remove(int a_nValue)
 					iteratorParent->setLeft(nullptr);
 				}
 			}
-			else if (iteratorNode = iteratorParent->getRight())
+			//If we are deleting the parent's right node
+			else if (iteratorNode == iteratorParent->getRight())
 			{
+				//Set the right child of the parent to the right child of the minimum node
 				if (iteratorNode->hasRight())
 				{
 					iteratorParent->setRight(iteratorNode->getRight());
@@ -108,6 +116,53 @@ void BinaryTree::remove(int a_nValue)
 					delete iteratorNode;
 					iteratorParent->setRight(nullptr);
 				}
+			}
+		}
+		//If the current Node has no right branch
+		else
+		{
+			//If we are deleting the parent's left child
+			if (currentNode == parentNode->getLeft())
+			{
+				//Set the left child of the parent to the left child of the current node
+				if (currentNode->hasLeft())
+				{
+					parentNode->setLeft(currentNode->getLeft());
+					delete currentNode;
+				}
+				else 
+				{
+					delete currentNode;
+					parentNode->setLeft(nullptr);
+				}
+			}
+			//If we are deleting the parent's right child
+			else if (currentNode == parentNode->getRight())
+			{
+				//Set the right child of the parent to the left child of the current node
+				if (currentNode->hasLeft())
+				{
+					parentNode->setRight(currentNode->getLeft());
+					delete currentNode;
+				}
+				/*else if (currentNode->hasLeft())
+				{
+					parentNode->setLeft(currentNode->getLeft());
+					delete currentNode;
+				}*/
+				else
+				{
+					delete currentNode;
+					parentNode->setRight(nullptr);
+				}
+			}
+			//If we are deleting the root
+			else if (currentNode == m_pRoot)
+			{
+				//The root becomes the left child of the current node
+				m_pRoot = currentNode->getLeft();
+				m_pRoot->setLeft(currentNode->getLeft()->getLeft());
+				delete currentNode->getLeft();
 			}
 		}
 	}
@@ -131,7 +186,7 @@ TreeNode* BinaryTree::find(int a_nValue)
 void BinaryTree::draw(TreeNode* selected)
 {
 	//Draw the root node
-	draw(m_pRoot, 640, 200, 640, selected);
+	draw(m_pRoot, 640, 200, 340, selected);
 }
 
 bool BinaryTree::findNode(int a_nSearchValue, TreeNode ** ppOutNode, TreeNode ** ppOutParent)

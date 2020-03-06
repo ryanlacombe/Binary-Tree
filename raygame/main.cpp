@@ -36,7 +36,9 @@ int main()
 	tree.insert(9);
 	tree.insert(14);
 	tree.insert(7);
-	selected = tree.find(15);
+	selected = tree.find(7);
+
+	tree.remove(12);
 
 
 	tree.draw();
