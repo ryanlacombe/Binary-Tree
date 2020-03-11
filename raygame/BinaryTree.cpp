@@ -26,39 +26,53 @@ void BinaryTree::insert(int a_nValue)
 {
 	TreeNode* insertNode = new TreeNode(a_nValue);
 
+	//If the tree is empty, the value is inserted at the root
 	if (isEmpty() == true)
 	{
 		m_pRoot = insertNode;
 	}
 	else
 	{
+		//Set the current node to the root and keep track of its parent
 		TreeNode* currentNode = m_pRoot;
 		TreeNode* parentNode = currentNode;
 
+		//While the current node is not null
 		while (currentNode != nullptr)
 		{
+			//If the value to be inserted is less than the value in the current node
 			if (a_nValue < currentNode->getData())
 			{
+				//Set the current node to the left child and continue
 				parentNode = currentNode;
 				currentNode = currentNode->getLeft();
 			}
+			//If the value to be inserted is greater than the current node
 			else if (a_nValue > currentNode->getData())
 			{
+				//Set the current node to the right child and continue
 				parentNode = currentNode;
 				currentNode = currentNode->getRight();
 			}
+			//If the value to be inserted is the same as the value in the current node
 			else if (a_nValue == currentNode->getData())
 			{
+				//The value is already in the tree, so return
 				return;
 			}
+			//End while
 		}
 
+		//If value to be inserted is less than parent
 		if (a_nValue < parentNode->getData())
 		{
+			//Insert value as left child node
 			parentNode->setLeft(insertNode);
 		}
+		//Otherwise
 		else if (a_nValue > parentNode->getData())
 		{
+			//Insert value as right child node
 			parentNode->setRight(insertNode);
 		}
 	}
@@ -191,33 +205,43 @@ void BinaryTree::draw(TreeNode* selected)
 
 bool BinaryTree::findNode(int a_nSearchValue, TreeNode ** ppOutNode, TreeNode ** ppOutParent)
 {
+	//Set the current node to the root
 	TreeNode* currentNode = m_pRoot;
 	TreeNode* parentNode = nullptr;
 
+	//While the current node is not null
 	while (currentNode != nullptr)
 	{
+		//If the search value equals the current node value,
 		if (a_nSearchValue == currentNode->getData())
 		{
+			//Return the current node and its parent
 			*ppOutNode = currentNode;
 			*ppOutParent = parentNode;
 			return true;
 		}
+		//If the search value is less than the current node
 		else if (a_nSearchValue < currentNode->getData())
 		{
+			//Set the current node to the left child
 			parentNode = currentNode;
 			currentNode = currentNode->getLeft();
 		}
+		//Otherwise
 		else if (a_nSearchValue > currentNode->getData())
 		{
+			//Set the current node to the right child
 			parentNode = currentNode;
 			currentNode = currentNode->getRight();
 		}
+		//End while
 		else
 		{
 			currentNode = nullptr;
 		}
 	}
 
+	//If the loop exits, then a match was not found, so return false
 	if (currentNode = nullptr)
 	{
 		return false;
